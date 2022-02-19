@@ -1,0 +1,11 @@
+FROM golang:1.17 AS builder
+ENV APP_HOME /go/src/github.com/majoo_test/soal_1
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app ./cmd/
+
+FROM alpine:latest
+WORKDIR /root/
+COPY --from=builder /go/src/github.com/majoo_test/soal_1/app ./
+ENTRYPOINT [ "./app" ]
