@@ -24,7 +24,7 @@ func (repo *TransactionRepository) FindByMerchant(merchantIds []int64, dateFrom 
 	}
 	tx = tx.Table(repo.tableName)
 
-	err = tx.Select("merchant_id").Where("merchant_id IN ? AND created_at >= ? AND created_at <= ?", merchantIds, dateFrom, dateTo).Group("DATE_FORMAT(created_at, '%Y-%m-%d')").Find(&results).Error
+	err = tx.Select("merchant_id, DATE_FORMAT(created_at, '%Y-%m-%d') as created_at, SUM(bill_total) as bill_total").Where("merchant_id IN ? AND created_at >= ? AND created_at <= ?", merchantIds, dateFrom, dateTo).Group("merchant_id,DATE_FORMAT(created_at, '%Y-%m-%d')").Find(&results).Error
 	return
 }
 
@@ -36,6 +36,6 @@ func (repo *TransactionRepository) FindByOutlet(outletIds []int64, dateFrom stri
 	}
 	tx = tx.Table(repo.tableName)
 
-	err = tx.Select("merchant_id, outlet_id").Where("outlet_id IN ? AND created_at >= ? AND created_at <= ?", outletIds, dateFrom, dateTo).Group("DATE_FORMAT(created_at, '%Y-%m-%d')").Find(&results).Error
+	err = tx.Select("merchant_id, outlet_id, DATE_FORMAT(created_at, '%Y-%m-%d') as created_at, SUM(bill_total) as bill_total").Where("outlet_id IN ? AND created_at >= ? AND created_at <= ?", outletIds, dateFrom, dateTo).Group("merchant_id,outlet_id,DATE_FORMAT(created_at, '%Y-%m-%d')").Find(&results).Error
 	return
 }

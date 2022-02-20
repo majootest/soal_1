@@ -64,6 +64,7 @@ func (srv *MerchantService) FindOmzetReportNovember(userId int64, pagination *en
 			entity.MerchantOmzet{
 				MerchantName: merchantName,
 				Omzet:        v.BillTotal,
+				CreatedAt:    v.CreatedAt,
 			},
 		)
 	}

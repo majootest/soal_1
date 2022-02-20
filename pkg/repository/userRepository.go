@@ -27,7 +27,7 @@ func (repo *UserRepository) FindAll(options *entity.Pagination) (results []entit
 }
 
 func (repo *UserRepository) FindByUsernameAndPassword(username, password string) (data entity.User, err error) {
-	err = repo.db.Where("username = ? AND password = ?", username, password).Order("id").Find(&data).Error
+	err = repo.db.Where("user_name = ? AND password = ?", username, password).Order("id").Find(&data).Error
 	return
 }
 

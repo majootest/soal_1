@@ -14,6 +14,7 @@ type OutletOmzet struct {
 	MerchantName string  `json:"merchant_name"`
 	OutletName   string  `json:"outlet_name"`
 	Omzet        float64 `json:"omzet"`
+	CreatedAt    string  `json:"created_at"`
 }
 
 type OutletService interface {

@@ -74,7 +74,7 @@ func (srv *OutletService) FindOmzetReportNovember(userId int64, pagination *enti
 			mapMerchant[v.MerchantID] = merchantName
 		}
 
-		outletName, ok := mapMerchant[v.OutletID]
+		outletName, ok := mapOutlet[v.OutletID]
 		if !ok {
 			outlet, e := srv.repo.FindByID(v.OutletID)
 			if e != nil {
@@ -93,6 +93,7 @@ func (srv *OutletService) FindOmzetReportNovember(userId int64, pagination *enti
 				MerchantName: merchantName,
 				OutletName:   outletName,
 				Omzet:        v.BillTotal,
+				CreatedAt:    v.CreatedAt,
 			},
 		)
 	}

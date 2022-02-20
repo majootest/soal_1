@@ -30,8 +30,8 @@ func (srv *AuthService) UserLogin(user *entity.User) (jwtToken string, err *pkg.
 		return
 	}
 
-	pwd := md5.Sum([]byte(user.Password))
-	getuser, e := srv.userRepo.FindByUsernameAndPassword(user.UserName, string(pwd[:]))
+	pwd := fmt.Sprintf("%x", md5.Sum([]byte(user.Password)))
+	getuser, e := srv.userRepo.FindByUsernameAndPassword(user.UserName, pwd)
 	if e != nil {
 		err = pkg.NewError(
 			fmt.Sprintf("Could not retrieve user data : %s", e.Error()),
@@ -48,8 +48,8 @@ func (srv *AuthService) UserLogin(user *entity.User) (jwtToken string, err *pkg.
 		map[string]interface{}{
 			"iss":      getuser.UserName,
 			"sub":      getuser.UserName,
-			"exp":      int64(36000),
-			"iat":      time.Now().Format("2006-01-02 15:04:05"),
+			"exp":      time.Now().Add(time.Hour * 10),
+			"iat":      time.Now(),
 			"user_id":  getuser.ID,
 			"iat_unix": time.Now().Unix(),
 		},
@@ -76,8 +76,6 @@ func (srv *AuthService) UserAuth(jwtToken string) (token jwt.Token, err *pkg.Err
 		return
 	}
 
-	iat, _ := token.Get("iat")
-	issuedAt, e := time.Parse("2006-01-02 15:04:05", iat.(string))
 	if e != nil {
 		err = pkg.NewError(
 			fmt.Sprintf("Parse time failed : %s", e.Error()),
@@ -89,7 +87,7 @@ func (srv *AuthService) UserAuth(jwtToken string) (token jwt.Token, err *pkg.Err
 	timeNow := time.Now().Unix()
 
 	exp, _ := token.Get("exp")
-	expiryTime := issuedAt.Unix() + exp.(int64)
+	expiryTime := exp.(time.Time).Unix()
 	if timeNow > expiryTime {
 		err = pkg.NewError("Unauthorized, Access token expired", 401)
 	}

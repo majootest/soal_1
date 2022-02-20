@@ -31,6 +31,6 @@ func (repo *OutletRepository) FindByID(id int64) (data entity.Outlet, err error)
 }
 
 func (repo *OutletRepository) FindByMerchantID(merchantIds []int64) (data []entity.Outlet, err error) {
-	err = repo.db.Where("user_id IN ?", merchantIds).Order("id").Find(&data).Error
+	err = repo.db.Where("merchant_id IN ?", merchantIds).Order("id").Find(&data).Error
 	return
 }

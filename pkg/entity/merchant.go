@@ -13,6 +13,7 @@ type Merchant struct {
 type MerchantOmzet struct {
 	MerchantName string  `json:"merchant_name"`
 	Omzet        float64 `json:"omzet"`
+	CreatedAt    string  `json:"created_at"`
 }
 
 type MerchantService interface {

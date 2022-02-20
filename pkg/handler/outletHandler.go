@@ -58,7 +58,7 @@ func (handler *OutletHandler) GetOmzetReport(c *fiber.Ctx) error {
 
 	userId, _ := payload.Get("user_id")
 	result := make([]entity.OutletOmzet, 0)
-	if result, err = handler.outletSrv.FindOmzetReportNovember(userId.(int64), pagination); err != nil {
+	if result, err = handler.outletSrv.FindOmzetReportNovember(int64(userId.(float64)), pagination); err != nil {
 		response := fiber.Map{
 			"result": nil,
 			"error":  err.Error(),

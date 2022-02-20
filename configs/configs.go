@@ -15,6 +15,8 @@ const (
 	DB_NAME = "news_app"
 
 	TZ = "Asia/Jakarta"
+
+	CHARSET = "latin1"
 )
 
 func GetMySqlDSN() (result string) {
@@ -37,6 +39,6 @@ func GetMySqlDSN() (result string) {
 		dbName = DB_NAME
 	}
 
-	result = fmt.Sprintf("%s:%s@tcp(%s)/%s", user, password, address, dbName)
+	result = fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s", user, password, address, dbName, CHARSET)
 	return
 }
